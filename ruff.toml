@@ -1,0 +1,10 @@
+# The lint the project is kept clean under: `ruff check` with no flags.
+line-length = 110
+target-version = "py311"
+
+[lint]
+select = ["F", "E9", "E501"]
+
+[lint.per-file-ignores]
+# report/table strings are clearer on one line
+"scripts/backtest/*" = ["E501"]

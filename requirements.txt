@@ -1,0 +1,13 @@
+telethon>=1.36,<2
+httpx>=0.27,<0.29
+SQLAlchemy[asyncio]>=2.0.36,<3
+asyncpg>=0.30,<0.32
+aiosqlite>=0.20,<0.22
+pydantic>=2.9,<3
+pydantic-settings>=2.6,<3
+# reads the levels off chart screenshots (OCR + colour)
+rapidocr-onnxruntime>=1.2,<2
+# optional: a second reader for posts the parser cannot make out (LLM_FALLBACK)
+anthropic>=1,<2
+# optional: live top-of-book prices over the MEXC WebSocket (PRICE_FEED=websocket)
+websockets>=12,<16

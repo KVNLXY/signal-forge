@@ -1,0 +1,6 @@
+-r requirements.txt
+pytest>=8.3,<9
+pytest-asyncio>=0.24,<2
+qrcode>=7,<9        # only for: scripts/login.py --qr
+reportlab>=4,<6        # only for: scripts/backtest/report.py
+matplotlib>=3.9,<4     # only for: scripts/backtest/report.py

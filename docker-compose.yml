@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: signalforge
+      POSTGRES_PASSWORD: signalforge
+      POSTGRES_DB: signalforge
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U signalforge"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  bot:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      # Inside compose the database always lives on the db service.
+      DATABASE_URL: postgresql+asyncpg://signalforge:signalforge@db:5432/signalforge
+    command: ["python", "-m", "app.main"]
+
+volumes:
+  pgdata:

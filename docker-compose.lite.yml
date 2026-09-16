@@ -1,0 +1,26 @@
+# Small-server variant: one container, SQLite instead of PostgreSQL.
+#
+#   docker compose -f docker-compose.lite.yml up -d
+#
+# Use this on a 1 GB free-tier VM where a separate Postgres container would
+# not fit.  Everything else behaves identically; the database is a file on a
+# named volume, so it survives restarts and image rebuilds.
+
+services:
+  bot:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: sqlite+aiosqlite:////data/signalforge.db
+    volumes:
+      - signalforge-data:/data
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  signalforge-data:

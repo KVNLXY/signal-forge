@@ -1,0 +1,38 @@
+# systemd unit for running SignalForge without Docker (the lightest option:
+# roughly 200 MB of RAM, no daemon, no extra containers).
+#
+#   sudo cp deploy/signalforge.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now signalforge
+#   journalctl -u signalforge -f
+
+[Unit]
+Description=SignalForge halal spot trading bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=signalforge
+Group=signalforge
+WorkingDirectory=/opt/signalforge
+# .env is read from WorkingDirectory, so it must live next to the app.
+ExecStart=/opt/signalforge/.venv/bin/python -m app.main
+Restart=always
+RestartSec=10
+KillSignal=SIGINT
+TimeoutStopSec=30
+
+# The bot only needs its own directory.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/signalforge
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=signalforge
+
+[Install]
+WantedBy=multi-user.target
