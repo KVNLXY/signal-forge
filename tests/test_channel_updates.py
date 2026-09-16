@@ -160,6 +160,11 @@ async def test_reply_and_only_position_resolve_the_coin(tmp_path):
         # Someone else's channel with nothing open: not ours.
         await engine.handle_message("Yopamiz", channel_identifier="@gamma", tg_message_id=30)
         assert len(await pending(database)) == 2
+
+        # A coin we do not hold is named: never re-routed to the channel's
+        # only position (@alpha holds BTC, the post is about DOGE).
+        await engine.handle_message("#DOGE yopamiz", channel_identifier="@alpha", tg_message_id=31)
+        assert len(await pending(database)) == 2
     finally:
         await database.close()
 

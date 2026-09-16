@@ -1015,6 +1015,9 @@ class TradingEngine:
             for signal in await repo.active_signals(session):
                 if signal.symbol == symbol:
                     return None, signal
+            # The post names a coin we do not hold: it is about someone
+            # else's trade, never about ours - no guessing from here on.
+            return None, None
 
         original = await repo.find_message(session, channel_id, reply_to_message_id)
         if original is not None:
